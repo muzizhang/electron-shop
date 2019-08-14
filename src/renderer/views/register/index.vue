@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
       <div class="title-container">
-        <h3 class="title">登录</h3>
+        <h3 class="title">注册</h3>
       </div>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
@@ -32,12 +32,11 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          登录12
+          注册
         </el-button>
       </el-form-item>
       <div class="tips">
-        <span>忘记密码</span>
-        <span style="margin-right:20px;" @click="toRegister">点击注册</span>
+        <span style="margin-right:20px;">去登录</span>
       </div>
     </el-form>
   </div>
@@ -99,10 +98,6 @@ export default {
           return false
         }
       })
-    },
-    toRegister() {
-      console.log(1)
-      this.$router.push({ path: '/register' })
     }
   }
 }
@@ -174,14 +169,13 @@ $light_gray:#eee;
   }
   .tips {
     font-size: 14px;
-    color: $bg;
+    color: #fff;
     margin-bottom: 10px;
     float: right;
     span {
       &:first-of-type {
         margin-right: 16px;
       }
-      cursor: pointer;
     }
   }
   .svg-container {
