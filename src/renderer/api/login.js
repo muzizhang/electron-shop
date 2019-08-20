@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+// 登录
 export function login(username, password) {
   return request({
     url: '/user/login',
@@ -11,6 +12,16 @@ export function login(username, password) {
   })
 }
 
+// 注册
+export function register(params) {
+  return request({
+    url: '/user/register',
+    method: 'post',
+    data: params
+  })
+}
+
+// 获取用户信息
 export function getInfo(token) {
   return request({
     url: '/user/info',
@@ -19,6 +30,7 @@ export function getInfo(token) {
   })
 }
 
+// 退出
 export function logout() {
   return request({
     url: '/user/logout',

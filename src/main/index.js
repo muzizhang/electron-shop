@@ -7,6 +7,7 @@ import { app, BrowserWindow } from 'electron'
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
@@ -20,6 +21,9 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
+    webPreferences: {
+      nodeIntegration: true
+    },
     width: 1000
   })
 

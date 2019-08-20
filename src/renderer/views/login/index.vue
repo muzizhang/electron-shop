@@ -44,13 +44,12 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
 
 export default {
   name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
+      if (!value) {
         callback(new Error('请输入正确的用户名'))
       } else {
         callback()
@@ -101,8 +100,8 @@ export default {
       })
     },
     toRegister() {
-      console.log(1)
       this.$router.push({ path: '/register' })
+      // this.$router.go('/register')
     }
   }
 }

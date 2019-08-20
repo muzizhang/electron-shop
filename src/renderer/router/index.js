@@ -30,6 +30,7 @@ export const constantRouterMap = [
   {
     path: '/register',
     component: () => import('@/views/register/index'),
+    name: 'register',
     hidden: true
   },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
@@ -45,7 +46,6 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-
   {
     path: '/example',
     component: Layout,
