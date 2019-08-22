@@ -3,9 +3,9 @@
     <el-form
       class="login-form"
       autoComplete="on"
-      :model="loginForm"
+      :model="registerForm"
       :rules="loginRules"
-      ref="loginForm"
+      ref="registerForm"
       label-position="left"
     >
       <div class="title-container">
@@ -18,7 +18,7 @@
         <el-input
           name="username"
           type="text"
-          v-model="loginForm.username"
+          v-model="registerForm.username"
           autoComplete="on"
           placeholder="请输入用户名"
         />
@@ -30,7 +30,7 @@
         <el-input
           name="password"
           type="password"
-          v-model="loginForm.password"
+          v-model="registerForm.password"
           autoComplete="on"
           placeholder="请输入密码"
         />
@@ -42,10 +42,10 @@
         <el-input
           name="rePassword"
           type="password"
-          @keyup.enter.native="handleLogin"
-          v-model="loginForm.rePassword"
+          @keyup.enter.native="handleRegister"
+          v-model="registerForm.rePassword"
           autoComplete="on"
-          placeholder="请输入密码"
+          placeholder="请再次输入密码"
         />
       </el-form-item>
       <el-form-item>
@@ -53,7 +53,7 @@
           type="primary"
           style="width:100%;"
           :loading="loading"
-          @click.native.prevent="handleLogin"
+          @click.native.prevent="handleRegister"
         >
           注册
         </el-button>
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import { getSHA1 } from '@/utils/cryptoJs'
 import { register } from '@/api/login'
 
 export default {
@@ -73,73 +74,58 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入用户名'))
-      } else if (value.length < 4 || value.length > 16) {
-        callback(new Error('用户名长度为4-16'))
-      } else if (!/^[a-zA-Z0-9_-]{4,16}$/.test(value)) {
-        callback(new Error('用户名有字母、数字、下划线、减号组成'))
+        callback(new Error('用户名不能为空'))
+      } else if (value.length < 2 || value.length > 12) {
+        callback(new Error('用户名长度为2-12'))
       } else {
         callback()
       }
     }
-    const validatePass = (rule, value, callback) => {
+    const validatePassword = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入密码'))
-      } else if (value.length < 6) {
-        callback(new Error('密码至少6位'))
-      } else if (/^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/.test(value)) {
-        callback(new Error('至少1个大写字母，1个小写字母，1个数字，1个特殊字符'))
+        callback(new Error('密码不能为空'))
+      }
+      if (value.length < 6) {
+        callback(new Error('密码不能少于6位'))
+      } else if (this.registerForm.repassword) {
+        callback(this.$refs.registerForm.validateField('repassword'))
       } else {
-        this.$refs['loginForm'].validateField('rePassword')
-        if (this.loginForm.rePassword !== '' &&
-          this.loginForm.rePassword !== value &&
-          /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/.test(this.loginForm.rePassword)) {
-          callback(new Error('密码保持一致'))
-        } else {
-          callback()
-        }
+        callback()
       }
     }
-    const validateRepassword = (rule, value, callback) => {
+    const repassword = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入密码'))
-      } else if (value.length < 6) {
-        callback(new Error('密码至少6位'))
-      } else if (/^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/.test(value)) {
-        callback(new Error('至少1个大写字母，1个小写字母，1个数字，1个特殊字符'))
+        callback(new Error('确认密码不能为空'))
+      }
+      if (value !== this.registerForm.password) {
+        callback(new Error('两次密码输入不一致'))
       } else {
-        // this.$refs['loginForm'].validateField('password')
-        if (this.loginForm.password !== '' &&
-          this.loginForm.password !== value &&
-          /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/.test(this.loginForm.password)) {
-          callback(new Error('密码保持一致'))
-        } else {
-          callback()
-        }
+        callback()
       }
     }
     return {
-      loginForm: {
+      registerForm: {
         username: '',
         password: '',
         rePassword: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }],
-        rePassword: [{ required: true, trigger: 'blur', validator: validateRepassword }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        rePassword: [{ required: true, trigger: 'blur', validator: repassword }]
       },
       loading: false
     }
   },
   methods: {
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    handleRegister() {
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
           this.loading = true
+          const arithmeticValue = getSHA1(this.registerForm.password)
           const params = {
-            userName: this.loginForm.username,
-            password: this.loginForm.password
+            userName: this.registerForm.username,
+            password: arithmeticValue
           }
           register(params)
             .then(res => {
