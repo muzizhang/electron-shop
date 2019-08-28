@@ -15,7 +15,7 @@ export function login(username, password) {
 // 注册
 export function register(params) {
   return request({
-    url: '/api/register',
+    url: '/register',
     method: 'post',
     data: params
   })

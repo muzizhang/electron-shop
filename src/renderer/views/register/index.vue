@@ -105,9 +105,9 @@ export default {
     }
     return {
       registerForm: {
-        username: '',
-        password: '',
-        rePassword: ''
+        username: 'huahua',
+        password: '123456',
+        rePassword: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -133,8 +133,8 @@ export default {
               this.loading = false
               this.$router.push({ path: '/login' })
             })
-            .catch(err => {
-              console.log(err)
+            .catch((error) => {
+              console.log('error========', error)
               this.loading = false
             })
         } else {
