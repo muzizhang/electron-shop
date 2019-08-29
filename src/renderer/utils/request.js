@@ -1,13 +1,12 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
-import store from '../store'
+import store from '@/store'
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 15000 // 请求超时时间
+  timeout: 5000 // 请求超时时间
 })
-
 
 // request拦截器
 service.interceptors.request.use(
@@ -20,7 +19,7 @@ service.interceptors.request.use(
     return config
   }, error => {
     // Do something with request error
-    console.log(error)
+    // console.log(error)
     Promise.reject(error)
   }
 )
@@ -32,7 +31,7 @@ service.interceptors.response.use(
   * code为非20000是抛错 可结合自己业务进行修改
   */
     const res = response.data
-    if (res.code !== 20000) {
+    if (res.code !== 2000) {
       Message({
         message: res.message,
         type: 'error',
@@ -51,14 +50,13 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject('error')
+      return response
     } else {
-      return response.data
+      return response
     }
   },
   error => {
-    console.log('err' + error)// for debug
-    
+    // console.log('err' + error)// for debug
     Message({
       message: error.message,
       type: 'error',

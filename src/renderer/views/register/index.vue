@@ -125,11 +125,10 @@ export default {
           const arithmeticValue = getSHA1(this.registerForm.password)
           const params = {
             userName: this.registerForm.username,
-            password: arithmeticValue
+            pwd: arithmeticValue
           }
           register(params)
             .then(res => {
-              console.log(res)
               this.loading = false
               this.$router.push({ path: '/login' })
             })

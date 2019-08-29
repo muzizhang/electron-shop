@@ -1,5 +1,4 @@
 module.exports = {
   NODE_ENV: '"development"',
-  // ENV_CONFIG: '"dev"',
-  BASE_API: '"http://localhost:8888/users"'
+  BASE_API: '"http://172.18.10.20:8888"'
 }

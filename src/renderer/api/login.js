@@ -1,32 +1,33 @@
 import request from '@/utils/request'
-
+// 注册
+export function register(params) {
+  return request({
+    url: '/users/register',
+    method: 'post',
+    data: {
+      username: params.userName,
+      pwd: params.pwd
+    }
+  })
+}
 // 登录
-export function login(username, password) {
+export function login(username, pwd) {
   return request({
     url: '/users/login',
     method: 'post',
     data: {
       username,
-      password
+      pwd
     }
   })
 }
 
-// 注册
-export function register(params) {
-  return request({
-    url: '/register',
-    method: 'post',
-    data: params
-  })
-}
-
 // 获取用户信息
-export function getInfo(token) {
+export function getInfo(username) {
   return request({
-    url: '/user/info',
+    url: '/users/info',
     method: 'get',
-    params: { token }
+    params: { username }
   })
 }
 
