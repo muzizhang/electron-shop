@@ -27,14 +27,17 @@ export function getInfo(username) {
   return request({
     url: '/users/info',
     method: 'get',
-    params: { username }
+    params: { username: username }
   })
 }
 
 // 退出
-export function logout() {
+export function logout(username) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: '/users/logout',
+    method: 'post',
+    data: {
+      username
+    }
   })
 }

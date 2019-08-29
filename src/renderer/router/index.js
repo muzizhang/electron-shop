@@ -47,36 +47,56 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/example',
+    path: '/good',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    name: 'good',
+    redirect: '/good/index',
+    meta: { title: '商品列表', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'index',
+        name: 'goodList',
+        component: () => import('@/views/good/index'),
+        meta: { title: '商品列表', icon: 'example' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'create',
+        name: 'createGood',
+        component: () => import('@/views/good/create'),
+        meta: { title: '创建商品', icon: 'example' }
       }
     ]
   },
-
   {
-    path: '/form',
+    path: '/personal',
+    component: Layout,
+    name: 'personal',
+    redirect: '/personal/index',
+    meta: { title: '个人中心', icon: 'example' },
+    children: [
+      {
+        path: 'index',
+        name: 'goodList',
+        component: () => import('@/views/personal/index'),
+        meta: { title: '个人信息', icon: 'example' }
+      },
+      {
+        path: 'create',
+        name: 'createGood',
+        component: () => import('@/views/personal/edit'),
+        meta: { title: '修改密码', icon: 'example' }
+      }
+    ]
+  },
+  {
+    path: '/user',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        name: 'user',
+        component: () => import('@/views/user/index'),
+        meta: { title: '用户列表', icon: 'form' }
       }
     ]
   },

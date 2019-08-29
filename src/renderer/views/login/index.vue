@@ -32,7 +32,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          登录12
+          登录
         </el-button>
       </el-form-item>
       <div class="tips">
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-
+import { getSHA1 } from '@/utils/cryptoJs'
 export default {
   name: 'login',
   data() {
@@ -64,7 +64,7 @@ export default {
     }
     return {
       loginForm: {
-        username: 'zhangsan',
+        username: 'huahua',
         password: '123456'
       },
       loginRules: {
@@ -87,7 +87,12 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm)
+          const arithmeticValue = getSHA1(this.loginForm.password)
+          const params = {
+            username: this.loginForm.username,
+            password: arithmeticValue
+          }
+          this.$store.dispatch('Login', params)
             .then(() => {
               this.loading = false
               this.$router.push({ path: '/' })

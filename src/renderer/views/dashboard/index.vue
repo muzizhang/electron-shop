@@ -1,13 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name:{{name}}</div>
-    <div class="dashboard-text">
-      roles:
-      <!-- <span v-for='role in roles' :key='role'>
-        {{role}}
-      </span> -->
-      dashboard
-    </div>
+    <img :src="avatar" alt="">
   </div>
 </template>
 
@@ -18,7 +11,8 @@ export default {
   computed: {
     ...mapGetters([
       'name',
-      'roles'
+      'roles',
+      'avatar'
     ])
   }
 }
@@ -33,5 +27,13 @@ export default {
     font-size: 30px;
     line-height: 46px;
   }
+}
+img {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #cccccc;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 2px 2px 2px #000000;
 }
 </style>

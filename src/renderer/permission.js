@@ -7,13 +7,11 @@ import { Message } from 'element-ui'
 const whiteList = ['/login', '/register'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  console.log('token', store.getters.token)
   if (store.getters.token) {
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      console.log('permission=======')
       // if (store.getters.roles.length === 0) {
       store.dispatch('GetInfo').then(res => { // 拉取用户信息
         next()

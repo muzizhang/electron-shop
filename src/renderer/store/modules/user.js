@@ -33,7 +33,6 @@ const user = {
         login(username, pwd)
           .then(response => {
             const data = response.data
-            console.log('user store====', data)
             setToken(data.data.token)
             commit('SET_TOKEN', data.data.token)
             commit('SET_NAME', username)
@@ -48,15 +47,13 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.name).then(response => {
-          console.log(response)
           const data = response.data
-          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-          // commit('SET_ROLES', data.roles)
-          // } else {
-          // reject('getInfo: roles must be a non-null array !')
-          // }
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
+          if (data.data.avatar === null) {
+            commit('SET_AVATAR', 'https://shopuploadimage.oss-cn-beijing.aliyuncs.com/timg99.jpg?x-oss-process=style/hexo-img&Expires=1567088943&OSSAccessKeyId=TMP.hWtnF56FfxS7GcJ2LMKUesfg1YJJkZyL78VBqr3e29J3QnGU8dPhCfdtRzCoCH1FijnfGdjdwt2qaBWYWMR1SASDiuvctzqhyGTYEs6muUByVkuDfnQxJDYKBYMZqe.tmp&Signature=EZYsccHXA3IBsH6HV2fLtsbPy0A%3D')
+          } else {
+            commit('SET_AVATAR', data.data.avatar)
+          }
+          // commit('SET_NAME', data.name)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -67,7 +64,7 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout(state.name).then(() => {
           commit('SET_TOKEN', '')
           // commit('SET_ROLES', [])
           removeToken()
