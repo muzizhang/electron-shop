@@ -10,6 +10,14 @@ export function register(params) {
     }
   })
 }
+// 验证
+export function validateUsernamePost(username) {
+  return request({
+    url: '/users/validateUsername',
+    method: 'get',
+    params: username
+  })
+}
 // 登录
 export function login(username, pwd) {
   return request({

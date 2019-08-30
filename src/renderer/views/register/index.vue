@@ -67,7 +67,7 @@
 
 <script>
 import { getSHA1 } from '@/utils/cryptoJs'
-import { register } from '@/api/login'
+import { register, validateUsernamePost } from '@/api/login'
 
 export default {
   name: 'login',
@@ -78,7 +78,14 @@ export default {
       } else if (value.length < 2 || value.length > 12) {
         callback(new Error('用户名长度为2-12'))
       } else {
-        callback()
+        validateUsernamePost({ username: value })
+          .then(res => {
+            if (res.data.success) {
+              callback(new Error('该用户名已存在'))
+            } else {
+              callback()
+            }
+          })
       }
     }
     const validatePassword = (rule, value, callback) => {
@@ -105,9 +112,9 @@ export default {
     }
     return {
       registerForm: {
-        username: 'huahua',
-        password: '123456',
-        rePassword: '123456'
+        username: '',
+        password: '',
+        rePassword: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],

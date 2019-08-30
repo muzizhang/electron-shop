@@ -107,11 +107,6 @@ export default {
             value.shelves = !!value.shelves
             that.tableData.push(value)
           })
-          // this.tableData.forEach((value) => {
-          //   console.log(typeof value.shelves)
-          //   value.shelves = !!value.shelves
-          // })
-          console.log(this.tableData)
         })
     },
     tableRowClassName({ row, rowIndex }) {
@@ -123,9 +118,9 @@ export default {
       return ''
     },
     handleDelete(index, row) {
-      console.log(index, row)
-      deleteGood({ id: row.id })
+      deleteGood(row.id)
         .then(res => {
+          this.tableData.splice(index, 1)
           this.$message.success('商品删除成功')
         })
     },

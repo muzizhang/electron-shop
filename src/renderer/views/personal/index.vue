@@ -49,6 +49,24 @@ import { userDetail, currentUser } from '@/api/user'
 import { mapGetters } from 'vuex'
 export default {
   data() {
+    var validateEmail = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入邮箱'))
+      } else if (!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value)) {
+        callback(new Error('只允许为数字'))
+      } else {
+        callback()
+      }
+    }
+    var validatePhone = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入手机号'))
+      } else if (!/\d{3}-\d{8}|\d{4}-\{7,8}/.test(value)) {
+        callback(new Error('只允许为数字'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         userName: '',
@@ -66,8 +84,8 @@ export default {
       rules: {
         userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         nickname: [{ message: '请输入昵称', trigger: 'blur' }],
-        email: [{ message: '请输入邮箱', trigger: 'blur' }],
-        phone: [{ message: '请输入手机号', trigger: 'blur' }],
+        email: [{ validator: validateEmail, trigger: 'blur' }],
+        phone: [{ validator: validatePhone, trigger: 'blur' }],
         birthday: [{ message: '请输入生日', trigger: 'blur' }]
       }
     }
@@ -82,10 +100,8 @@ export default {
   },
   methods: {
     init() {
-      console.log(this.name)
       currentUser({ username: this.name })
         .then(res => {
-          console.log(res)
           this.form = {
             userName: res.data.data[0].userName,
             sex: res.data.data[0].sex,
@@ -100,10 +116,9 @@ export default {
     onSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          console.log('submit', this.form)
           userDetail(this.form)
             .then(res => {
-              console.log('personal===index====', res)
+              this.$message.success('个人信息修改成功')
             })
         }
       })

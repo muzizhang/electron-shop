@@ -82,6 +82,15 @@ import {
 import { createShop } from '@/api/shop'
 export default {
   data() {
+    var validatePrice = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入商品金额'))
+      } else if (!/[0-9]{1,}/.test(value)) {
+        callback(new Error('只允许为数字'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         name: '',
@@ -101,7 +110,7 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
         category: [{ required: true, message: '请选择商品分类', trigger: 'blur' }],
-        price: [{ required: true, message: '请输入商品价格', trigger: 'blur' }],
+        price: [{ required: true, validator: validatePrice, trigger: 'blur' }],
         shopName: [{ required: true, message: '请输入商铺名称', trigger: 'blur' }],
         address: [{ message: '请输入商铺地址', trigger: 'blur' }],
         desc: [{ message: '请输入描述商品', trigger: 'blur' }]
@@ -143,7 +152,6 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           // 上传商品
-          console.log('form   onSubmit', this.form)
           const params = {
             name: this.form.name,
             category: this.form.category,
@@ -155,7 +163,6 @@ export default {
             desc: this.form.desc,
             picture: this.picture
           }
-          console.log(params)
           createGood(params)
             .then(res => {
               createShop({ shopName: this.form.shopName, address: this.form.address })

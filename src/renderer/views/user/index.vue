@@ -99,7 +99,7 @@ export default {
     isShelves(index, row) {
       const params = {
         userName: row.userName,
-        status: row.status
+        status: row.status === false ? 0 : 1
       }
       userDisable(params)
         .then(res => {

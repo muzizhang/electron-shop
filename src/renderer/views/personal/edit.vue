@@ -17,7 +17,7 @@
         </router-link>
       </div>
 
-      <el-form-item prop="oldPassword">
+      <!-- <el-form-item prop="oldPassword">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
@@ -28,8 +28,8 @@
           name="oldPassword"
           @blur="blurOldPwd"
         />
-      </el-form-item>
-      <!-- <el-form-item prop="newPassword">
+      </el-form-item> -->
+      <el-form-item prop="newPassword">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
@@ -40,7 +40,7 @@
           name="newPassword"
           @blur="blurPassword"
         />
-      </el-form-item> -->
+      </el-form-item>
 
       <el-form-item prop="repassword">
         <span class="svg-container">
