@@ -64,6 +64,12 @@ export const constantRouterMap = [
         name: 'createGood',
         component: () => import('@/views/good/create'),
         meta: { title: '创建商品', icon: 'example' }
+      },
+      {
+        path: 'shop',
+        name: 'shop',
+        component: () => import('@/views/good/shop'),
+        meta: { title: '商铺列表', icon: 'example' }
       }
     ]
   },

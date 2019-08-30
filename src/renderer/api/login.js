@@ -23,11 +23,11 @@ export function login(username, pwd) {
 }
 
 // 获取用户信息
-export function getInfo(username) {
+export function getInfo(token) {
   return request({
     url: '/users/info',
     method: 'get',
-    params: { username: username }
+    params: { token: token }
   })
 }
 

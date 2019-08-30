@@ -57,11 +57,21 @@
         label="商品分类"
         prop="category">
       </el-table-column>
+      <el-table-column label="是否上架" prop="shelves">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.shelves"
+            active-color="#13ce66"
+            @change="isShelves(scope.$index, scope.row)"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="handleEdit(scope.$index, scope.row)">编辑</el-button> -->
           <el-button
             size="mini"
             type="danger"
@@ -73,6 +83,11 @@
 </template>
 
 <script>
+import {
+  getGoodList,
+  deleteGood,
+  goodRacking
+} from '@/api/good'
 export default {
   name: 'GoodIndex',
   data() {
@@ -80,7 +95,25 @@ export default {
       tableData: []
     }
   },
+  created() {
+    this.init()
+  },
   methods: {
+    init() {
+      getGoodList()
+        .then(res => {
+          const that = this
+          res.data.data.forEach((value) => {
+            value.shelves = !!value.shelves
+            that.tableData.push(value)
+          })
+          // this.tableData.forEach((value) => {
+          //   console.log(typeof value.shelves)
+          //   value.shelves = !!value.shelves
+          // })
+          console.log(this.tableData)
+        })
+    },
     tableRowClassName({ row, rowIndex }) {
       if (rowIndex === 1) {
         return 'warning-row'
@@ -88,6 +121,23 @@ export default {
         return 'success-row'
       }
       return ''
+    },
+    handleDelete(index, row) {
+      console.log(index, row)
+      deleteGood({ id: row.id })
+        .then(res => {
+          this.$message.success('商品删除成功')
+        })
+    },
+    isShelves(index, row) {
+      const params = {
+        id: row.id,
+        shelves: row.shelves === true ? 1 : 0
+      }
+      goodRacking(params)
+        .then(res => {
+          this.$message.success('是否上架状态修改成功')
+        })
     }
   }
 }

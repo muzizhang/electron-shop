@@ -11,57 +11,62 @@
             inline
             class="demo-table-expand"
           >
-            <el-form-item label="商品 ID">
-              <span>{{ props.row.id }}</span>
+            <el-form-item label="用户名称">
+              <span>{{ props.row.userName }}</span>
             </el-form-item>
-            <el-form-item label="商品名称">
-              <span>{{ props.row.name }}</span>
+            <el-form-item label="昵称">
+              <span>{{ props.row.nickname }}</span>
             </el-form-item>
-            <el-form-item label="商品价格">
-              <span>{{ props.row.price }}</span>
+            <el-form-item label="邮箱">
+              <span>{{ props.row.email }}</span>
             </el-form-item>
-            <el-form-item label="商品库存">
-              <span>{{ props.row.inventory }}</span>
+            <el-form-item label="手机号">
+              <span>{{ props.row.phone }}</span>
             </el-form-item>
-            <el-form-item label="商铺名称">
-              <span>{{ props.row.shopName }}</span>
+            <el-form-item label="性别">
+              <span>{{ props.row.sex }}</span>
             </el-form-item>
-            <el-form-item label="商铺 ID">
-              <span>{{ props.row.shopId }}</span>
-            </el-form-item>
-            <el-form-item label="商品分类">
-              <span>{{ props.row.category }}</span>
-            </el-form-item>
-            <el-form-item label="店铺地址">
-              <span>{{ props.row.address }}</span>
-            </el-form-item>
-            <el-form-item label="商品描述">
-              <span>{{ props.row.desc }}</span>
+            <el-form-item label="生日">
+              <span>{{ props.row.birth }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column
-        label="商品 ID"
+        label="用户 ID"
         prop="id">
       </el-table-column>
       <el-table-column
-        label="商品名称"
-        prop="name">
+        label="用户名称"
+        prop="userName">
       </el-table-column>
       <el-table-column
-        label="描述"
-        prop="desc">
+        label="昵称"
+        prop="nickname">
       </el-table-column>
       <el-table-column
-        label="商品分类"
-        prop="category">
+        label="手机号"
+        prop="phone">
+      </el-table-column>
+      <el-table-column label="是否禁用" prop="status">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            active-color="#13ce66"
+            @change="isShelves(scope.$index, scope.row)"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
+import {
+  getUserList,
+  userDisable
+} from '@/api/user'
 export default {
   name: 'GoodIndex',
   data() {
@@ -69,7 +74,20 @@ export default {
       tableData: []
     }
   },
+  created() {
+    this.init()
+  },
   methods: {
+    init() {
+      getUserList()
+        .then(res => {
+          const that = this
+          res.data.data.forEach((value) => {
+            value.status = !!value.status
+            that.tableData.push(value)
+          })
+        })
+    },
     tableRowClassName({ row, rowIndex }) {
       if (rowIndex === 1) {
         return 'warning-row'
@@ -77,6 +95,16 @@ export default {
         return 'success-row'
       }
       return ''
+    },
+    isShelves(index, row) {
+      const params = {
+        userName: row.userName,
+        status: row.status
+      }
+      userDisable(params)
+        .then(res => {
+          this.$message.success('是否禁用状态修改成功')
+        })
     }
   }
 }

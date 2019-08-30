@@ -19,6 +19,9 @@ export default {
     Sidebar,
     AppMain
   },
+  data() {
+    return {}
+  },
   mixins: [ResizeMixin],
   computed: {
     sidebar() {

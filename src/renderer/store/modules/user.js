@@ -46,14 +46,13 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.name).then(response => {
+        getInfo(state.token).then(response => {
           const data = response.data
           if (data.data.avatar === null) {
-            commit('SET_AVATAR', 'https://shopuploadimage.oss-cn-beijing.aliyuncs.com/timg99.jpg?x-oss-process=style/hexo-img&Expires=1567088943&OSSAccessKeyId=TMP.hWtnF56FfxS7GcJ2LMKUesfg1YJJkZyL78VBqr3e29J3QnGU8dPhCfdtRzCoCH1FijnfGdjdwt2qaBWYWMR1SASDiuvctzqhyGTYEs6muUByVkuDfnQxJDYKBYMZqe.tmp&Signature=EZYsccHXA3IBsH6HV2fLtsbPy0A%3D')
-          } else {
-            commit('SET_AVATAR', data.data.avatar)
+            data.data.avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
           }
-          // commit('SET_NAME', data.name)
+          commit('SET_AVATAR', data.data.avatar)
+          commit('SET_NAME', data.data.userName)
           resolve(response)
         }).catch(error => {
           reject(error)

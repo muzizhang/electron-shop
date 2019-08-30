@@ -1,25 +1,26 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" rules="rules" label-width="120px">
+    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
       <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName"></el-input>
+        <el-input :disabled="true" v-model="form.userName"></el-input>
       </el-form-item>
       <el-form-item label="性别" prop="sex">
-        <el-select v-model="form.sex" placeholder="请选择">
-          <el-option label="Zone one" value="shanghai"></el-option>
-        </el-select>
+        <el-radio-group v-model="form.sex">
+          <el-radio :label="1">男</el-radio>
+          <el-radio :label="0">女</el-radio>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="头像" prop="avatar">
+      <!-- <el-form-item label="头像" prop="avatar">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="#"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
           <img v-if="form.avatar" :src="form.avatar" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="昵称" prop="nickname">
         <el-input v-model="form.nickname"></el-input>
       </el-form-item>
@@ -38,23 +39,24 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import { userDetail, currentUser } from '@/api/user'
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       form: {
         userName: '',
-        sex: '',
+        sex: 0,
         nickname: '',
         email: '',
-        phone: false,
-        birthday: [],
+        phone: '',
+        birthday: '',
         avatar: ''
       },
       num: 1,
@@ -62,27 +64,48 @@ export default {
       dialogVisible: false,
       disabled: false,
       rules: {
-        userName: { required: true, message: '请输入用户名', trigger: 'blur' },
-        nickname: { message: '请输入昵称', trigger: 'blur' },
-        email: { message: '请输入邮箱', trigger: 'blur' },
-        phone: { message: '请输入手机号', trigger: 'blur' },
-        birthday: { message: '请输入生日', trigger: 'blur' }
+        userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        nickname: [{ message: '请输入昵称', trigger: 'blur' }],
+        email: [{ message: '请输入邮箱', trigger: 'blur' }],
+        phone: [{ message: '请输入手机号', trigger: 'blur' }],
+        birthday: [{ message: '请输入生日', trigger: 'blur' }]
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'name'
+    ])
+  },
+  created() {
+    this.init()
+  },
   methods: {
+    init() {
+      console.log(this.name)
+      currentUser({ username: this.name })
+        .then(res => {
+          console.log(res)
+          this.form = {
+            userName: res.data.data[0].userName,
+            sex: res.data.data[0].sex,
+            nickname: res.data.data[0].nickname,
+            email: res.data.data[0].email,
+            phone: res.data.data[0].phone,
+            birthday: res.data.data[0].birthday,
+            avatar: res.data.data[0].avatar
+          }
+        })
+    },
     onSubmit() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          console.log('submit')
+          console.log('submit', this.form)
+          userDetail(this.form)
+            .then(res => {
+              console.log('personal===index====', res)
+            })
         }
-      })
-    },
-    onCancel() {
-      this.$refs['form'].resetFields()
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
       })
     },
     handleAvatarSuccess(res, file) {

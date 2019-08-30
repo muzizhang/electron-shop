@@ -16,6 +16,9 @@ export default {
       type: String
     }
   },
+  data() {
+    return {}
+  },
   computed: {
     iconName() {
       return `#icon-${this.iconClass}`

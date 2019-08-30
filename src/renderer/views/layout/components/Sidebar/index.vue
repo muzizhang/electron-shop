@@ -21,6 +21,9 @@ import ScrollBar from '@/components/ScrollBar'
 
 export default {
   components: { SidebarItem, ScrollBar },
+  data() {
+    return {}
+  },
   computed: {
     ...mapGetters([
       'sidebar'
